@@ -487,7 +487,7 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         """)
 
     def helpUrl(self):
-        return 'https://github.com/lmotta/ibama-tools/wiki'
+        return 'https://github.com/lmotta/ibamaprocessing/wiki'
         
     def createInstance(self):
         return type(self)()
