@@ -16,9 +16,9 @@ category:Raster
 
 tags:IBAMA,tools,algorithm
 
-homepage:https://github.com/lmotta/ibama_tools/wiki
-tracker:https://github.com/lmotta/ibama_tools/issues
-repository:https://github.com/lmotta/ibama_tools
+homepage:https://github.com/lmotta/ibamaprocessing/wiki
+tracker:https://github.com/lmotta/ibamaprocessing/issues
+repository:https://github.com/lmotta/ibamaprocessing
 
 icon:ibama.svg
 
