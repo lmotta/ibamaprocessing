@@ -142,7 +142,7 @@
     <message>
         <location filename="../footprint_algorithm.py" line="546"/>
         <source>Value of NODATA(use by Valid pixels)</source>
-        <translation>Valor de NODATA(utilziado pelo pixeis Válidos)</translation>
+        <translation>Valor de NODATA(utilizado pelo pixeis Válidos)</translation>
     </message>
     <message>
         <location filename="../footprint_algorithm.py" line="552"/>

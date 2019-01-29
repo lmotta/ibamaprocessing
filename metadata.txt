@@ -14,7 +14,7 @@ email:motta.luiz@gmail.com
 
 category:Raster
 
-tags:IBAMA,tools
+tags:IBAMA,tools,algorithm
 
 homepage:https://github.com/lmotta/ibama_tools/wiki
 tracker:https://github.com/lmotta/ibama_tools/issues

@@ -9,6 +9,9 @@ cp *.svg "./$plugin_dir"
 for item in metadata.txt LICENSE; do cp "./$item" "./$plugin_dir"; done
 mkdir "./$plugin_dir/i18n"
 cp ./i18n/*.qm "./$plugin_dir/i18n"
+mkdir "./$plugin_dir/algorithms"
+cp ./algorithms/*.py "./$plugin_dir/algorithms"
+cp ./algorithms/*.svg "./$plugin_dir/algorithms"
 zip -r $plugin_dir $plugin_dir
 rm -r $plugin_dir
 #

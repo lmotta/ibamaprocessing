@@ -31,7 +31,7 @@ from qgis.PyQt.QtGui import QIcon
 
 from qgis.core import QgsProcessingProvider, QgsApplication
 
-from .footprint_algorithm import FootprintAlgorithm
+from .algorithms.footprint_algorithm import FootprintAlgorithm
 from .translate import Translate
 
 
@@ -41,7 +41,7 @@ def classFactory(iface):
 class IbamaPlugin(object):
     def __init__(self):
         self.provider = IbamaProvider()
-        self.translate = Translate('ibamatools')
+        self.translate = Translate('ibamaprocessing')
 
     def initGui(self):
         QgsApplication.processingRegistry().addProvider( self.provider )
