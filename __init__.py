@@ -41,7 +41,7 @@ def classFactory(iface):
 class IbamaPlugin(object):
     def __init__(self):
         self.provider = IbamaProvider()
-        self.translate = Translate('ibama_tools')
+        self.translate = Translate('ibamatools')
 
     def initGui(self):
         QgsApplication.processingRegistry().addProvider( self.provider )

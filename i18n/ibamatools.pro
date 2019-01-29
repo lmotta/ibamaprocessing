@@ -3,4 +3,4 @@ SOURCES = \
 ../footprint_algorithm.py
 
 TRANSLATIONS = \
-./footprint_pt_BR.ts
+./ibamatools_pt_BR.ts

@@ -409,7 +409,7 @@ class FootPrint():
             if countProgress % 5 == 0:
                 self.feedback.setProgress( int( countProgress * totalProgress ) )
         if self.feedback.isCanceled():
-            msg = QCoreApplication.translate('Footprint', 'Canceled b y user')
+            msg = QCoreApplication.translate('Footprint', 'Canceled by user')
             self.feedback.reportError( msg )
         if self.countErrorInfoArea > 0:
             msg = QCoreApplication.translate('Footprint', 'Total error for calculate area: {}. Expression for the filter:\n{}')
@@ -441,7 +441,9 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
 
     def __init__(self):
         super().__init__()
-        self.typesCalculate = { 0: 'Bounding Box(quickly)', 1: 'Valid pixels(slower)' }
+        labelBbox = QCoreApplication.translate('Footprint', 'Bounding Box(quickly)')
+        labelValidpixels = QCoreApplication.translate('Footprint', 'Valid pixels(slower)')
+        self.typesCalculate = { 0: labelBbox, 1: labelValidpixels }
 
     def name(self):
         return "Footprint"
@@ -467,25 +469,25 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         Calculate the footprints of georeferenced images.
 
         Usage:
-        - Choice the directory of input images
-        - Mark subdirectories for do recursive search of images
+        - Choice the directory of input images.
+        - Mark subdirectories for do recursive search of images.
         - Add filter in search of images.
           Use ';' to separate the words.
-          Ex.: filter1;filter2;filter3
-          If the word is contain inside the name of file, this image is selected
-        - Use the reverse of the filter to capture the opposite of the filters
+          Ex.: filter1;filter2;filter3.
+          If the word is contain inside the name of file, this image is selected.
+        - Use the reverse of the filter to capture the opposite of the filters.
         - Select the CRS for the calculate of area.
-          This CRS will be use if image not have the projected CRS
+          This CRS will be use if image not have the projected CRS.
         - Select the type of calculus of Footprint polygons:
-          . Bounding Box
-          . Valid pixels: Calculates the image limit
+          . Bounding Box.
+          . Valid pixels: Calculates the image limit.
         - Value of NODATA: Use this value for the areas where not have value.
-        - Select the CRS for the footprint layer
-        - Select the source for the output of footprint layer
+        - Select the CRS for the footprint layer.
+        - Select the source for the output of footprint layer.
         """)
 
     def helpUrl(self):
-        return 'https://github.com/lmotta/imagefootprint_plugin/wiki'
+        return 'https://github.com/lmotta/ibama-tools/wiki'
         
     def createInstance(self):
         return type(self)()

@@ -6,7 +6,7 @@ about:Tools for processing framework
   http://www.ibama.gov.br
   * Footprint Icon made by Freepik (http://www.freepik.com) from www.flaticon.com is licensed by Creative Commons BY 3.0
 
-version:2.0
+version:1.0
 qgisMinimumVersion:3.2
 
 author:Luiz Motta
