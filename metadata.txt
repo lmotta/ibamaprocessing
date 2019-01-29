@@ -1,0 +1,30 @@
+[general]
+name:IBAMA tools
+description:Tools for processing framework
+about:Tools for processing framework
+  This tools are developed on the demand of IBAMA(Brazilian Institute of Environment and Renewable Natural Resources)
+  http://www.ibama.gov.br
+  * Footprint Icon made by Freepik (http://www.freepik.com) from www.flaticon.com is licensed by Creative Commons BY 3.0
+
+version:2.0
+qgisMinimumVersion:3.2
+
+author:Luiz Motta
+email:motta.luiz@gmail.com
+
+category:Raster
+
+tags:IBAMA,tools
+
+homepage:https://github.com/lmotta/ibama_tools/wiki
+tracker:https://github.com/lmotta/ibama_tools/issues
+repository:https://github.com/lmotta/ibama_tools
+
+icon:ibama.svg
+
+experimental:True
+deprecated:False
+
+changelog: 1.0(2019-01-29)
+  Start of plugin
+  
