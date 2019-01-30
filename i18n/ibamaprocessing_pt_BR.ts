@@ -1,58 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt_BR">
+<!DOCTYPE TS><TS version="2.0" language="pt_BR" sourcelanguage="">
 <context>
     <name>Footprint</name>
     <message>
-        <location filename="../footprint_algorithm.py" line="208"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="189"/>
         <source>Error for geometry transform {}-&gt;{}</source>
         <translation>Erro na transformação geométrica {}-&gt;{}</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="227"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="208"/>
         <source>User not define a CRS for Area</source>
         <translation>Usuário não definiu um CRS para Área</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="270"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="251"/>
         <source>Error create Raster memory</source>
         <translation>Erro criando uma Imagem em memória</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="299"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="280"/>
         <source>Error create Polygon layer memory</source>
         <translation>Erro criando uma camada de Polígono em memória</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="412"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="394"/>
         <source>Canceled by user</source>
         <translation>Cancelado pelo usuário</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="415"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="397"/>
         <source>Total error for calculate area: {}. Expression for the filter:
 {}</source>
         <translation>Total de erros no cálculo de área: {}. Expressão para o filtro: {}</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="420"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="402"/>
         <source>Total None CRS area: {}. Expression for the filter:
 {}</source>
         <translation>Total de CRS da área não definido: {}. Expressão para o filtro: {}</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="425"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="407"/>
         <source>Total error for calculate geometry: {}. Expression for the filter:
 {}</source>
         <translation>Total de erros no cálculo de geometria: {}. Expressão para o filtro: {}</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="456"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="438"/>
         <source>Create footprint of images</source>
         <translation>Cria footprint de imagens</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="465"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="447"/>
         <source>IBAMA,image,raster,catalog</source>
         <translation>IBAMA,imagem, raster, catálogo</translation>
     </message>
@@ -78,7 +77,7 @@
         - Select the CRS for the footprint layer
         - Select the source for the output of footprint layer
         </source>
-        <translation>
+        <translation type="obsolete">
         Cálculo the footprint de imagens georeferenciadas.
 
         Uso:
@@ -100,87 +99,87 @@
         </translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="497"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="479"/>
         <source>Directory {} not exists</source>
         <translation>Diretório {] não existe</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="503"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="485"/>
         <source>CRS of area &apos;{}&apos; is not projected</source>
         <translation>CRS da área &apos;{}&apos; não é projetado</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="510"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="492"/>
         <source>Directory of input images</source>
         <translation>Diretório de entrada de imagens</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="516"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="498"/>
         <source>Search in subdirectories</source>
         <translation>Pesquisar dentro de subdiretórios</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="522"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="504"/>
         <source>Filters for search(separate by &apos;;&apos;)</source>
         <translation>Filtro de pesquisa(separado por &apos;;&apos;)</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="528"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="510"/>
         <source>Reverse of filters</source>
         <translation>Reverso do filtro</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="534"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="516"/>
         <source>CRS for calculate area(if CRS of image is not projected)</source>
         <translation>CRS para calcular area(se o CRS de imagem não é projetado)</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="540"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="522"/>
         <source>Type of calculus of Footprint polygons</source>
         <translation>Tipo de cálculo do polígono de footprint</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="546"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="528"/>
         <source>Value of NODATA(use by Valid pixels)</source>
         <translation>Valor de NODATA(utilizado pelo pixeis Válidos)</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="552"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="534"/>
         <source>CRS of Footprint layer</source>
         <translation>CRS da camada de Footprint</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="558"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="540"/>
         <source>Footprint layer</source>
         <translation>Camada de Footprint</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="582"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="564"/>
         <source>1/2 Searching images...</source>
         <translation>1/2 Pesquisando imagens...</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="589"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="571"/>
         <source>Missing images: {}!</source>
         <translation>Faltando imagens: {}!</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="594"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="576"/>
         <source>2/2 Adding features({})...</source>
         <translation>2/2 Adicionando feições({})...</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="444"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="426"/>
         <source>Bounding Box(quickly)</source>
         <translation>Caixa de envolvimento(rápido)</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="445"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="427"/>
         <source>Valid pixels(slower)</source>
         <translation>Pixeis válidos(lento)</translation>
     </message>
     <message>
-        <location filename="../footprint_algorithm.py" line="468"/>
+        <location filename="../algorithms/footprint_algorithm.py" line="450"/>
         <source>
         Calculate the footprints of georeferenced images.
 
