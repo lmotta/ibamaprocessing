@@ -39,7 +39,7 @@ from qgis.core import (
     QgsFeatureSink,
     QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsCoordinateTransformContext,
     QgsRectangle, QgsGeometry,
-    QgsFeature, QgsField, QgsFields, QgsWkbTypes,
+    QgsFeature, QgsField, QgsFields, QgsEditorWidgetSetup, QgsWkbTypes,
     QgsCsException
 )
 
@@ -51,25 +51,6 @@ from gdalconst import GA_ReadOnly
 gdal.UseExceptions()
 gdal.PushErrorHandler('CPLQuietErrorHandler')
 
-import datetime
-class FileDebug():
-    pathfile = '/home/lmotta/temp/plugin_debug.txt'
-    @staticmethod
-    def init():
-        fileDebug = open( FileDebug.pathfile, 'w')
-        timeNow = str(datetime.datetime.now())
-        msg = "DEBUG - {}\n".format( timeNow )
-        fileDebug.write( msg )
-        fileDebug.close()
-    @staticmethod
-    def write(message):
-        fileDebug = open( FileDebug.pathfile, 'a')
-        timeNow = str(datetime.datetime.now())
-        fileDebug.write( "{} - {}\n".format( message, timeNow ) )
-        fileDebug.close()
-
-#FileDebug.init()
-#FileDebug.write()
 
 class FootPrint():
     @staticmethod
@@ -77,7 +58,7 @@ class FootPrint():
         fields = QgsFields()
         fields.append( QgsField( 'pathfile', QVariant.String, len=250 ) )
         fields.append( QgsField( 'metadata', QVariant.String, len=500 ) )
-        fields.append( QgsField( 'metadata_html', QVariant.String, len=500 ) )
+        fields.append( QgsField( 'metadata_html', QVariant.String,len=500 ) )
         fields.append( QgsField( 'metadata_size', QVariant.Int ) )
         return { 'fields': fields, 'wkbType': QgsWkbTypes.MultiPolygon }
 
@@ -406,8 +387,9 @@ class FootPrint():
             feat.setAttribute('metadata_size', len( metadata_html ) )
             self.featureSink.addFeature( feat, QgsFeatureSink.FastInsert )
             countProgress += 1
-            if countProgress % 5 == 0:
-                self.feedback.setProgress( int( countProgress * totalProgress ) )
+            percent = int( countProgress * totalProgress )
+            if percent % 5 == 0:
+                self.feedback.setProgress( percent )
         if self.feedback.isCanceled():
             msg = QCoreApplication.translate('Footprint', 'Canceled by user')
             self.feedback.reportError( msg )

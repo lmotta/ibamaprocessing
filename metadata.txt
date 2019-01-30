@@ -1,5 +1,5 @@
 [general]
-name:IBAMA tools
+name:IBAMA processing
 description:Tools for processing framework
 about:Tools for processing framework
   This tools are developed on the demand of IBAMA(Brazilian Institute of Environment and Renewable Natural Resources)
@@ -14,7 +14,7 @@ email:motta.luiz@gmail.com
 
 category:Raster
 
-tags:IBAMA,tools,algorithm
+tags:IBAMA,tools,algorithms
 
 homepage:https://github.com/lmotta/ibamaprocessing/wiki
 tracker:https://github.com/lmotta/ibamaprocessing/issues
