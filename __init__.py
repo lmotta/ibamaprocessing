@@ -31,7 +31,7 @@ from qgis.PyQt.QtGui import QIcon
 
 from qgis.core import QgsProcessingProvider, QgsApplication
 
-from .algorithms.footprint_algorithm import FootprintAlgorithm
+from .algorithms.footprint_algorithm import FootprintAlgorithm, StyleOutputFootPrint
 from .translate import Translate
 
 
@@ -53,11 +53,11 @@ class IbamaPlugin(object):
 class IbamaProvider(QgsProcessingProvider):
     def __init__(self):
         QgsProcessingProvider.__init__(self)
-
+        self.styleOutputFootPrint = StyleOutputFootPrint()
         self.alglist = [ FootprintAlgorithm() ]
-
+        
     def unload(self):
-        pass
+        self.styleOutputFootPrint
 
     def loadAlgorithms(self):
         """

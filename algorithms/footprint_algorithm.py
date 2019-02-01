@@ -17,28 +17,42 @@ email                : motta.luiz@gmail.com
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 """
 
 __author__ = 'Luiz Motta'
-__date__ = 'January 2019'
+__date__ = '2019-01-29'
 __copyright__ = '(C) 2019, Luiz Motta'
 __revision__ = '$Format:%H$'
 
-from qgis.PyQt.QtCore import (
-    QCoreApplication,
-    QDir, QDirIterator,
-    QFileInfo, 
-    QVariant
-)
-from qgis.PyQt.QtGui import QIcon
+import os
 
+from qgis.PyQt.QtCore import (
+    QCoreApplication, QObject,
+    QDir, QDirIterator, QFileInfo, 
+    QVariant, QTimer,
+    pyqtSignal, pyqtSlot
+)
+from qgis.PyQt.QtGui import QIcon, QColor
+
+from qgis import utils as QgsUtils
 from qgis.core import (
+    QgsProject,
     QgsProcessingAlgorithm, QgsProcessing,
     QgsProcessingParameterFile, QgsProcessingParameterBoolean, QgsProcessingParameterString, QgsProcessingParameterEnum,
     QgsProcessingParameterCrs, QgsProcessingParameterNumber, QgsProcessingParameterFeatureSink,
     QgsFeatureSink,
     QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsCoordinateTransformContext,
     QgsRectangle, QgsGeometry,
+    QgsMapLayer, QgsRasterLayer,
     QgsFeature, QgsField, QgsFields, QgsEditorWidgetSetup, QgsWkbTypes,
     QgsCsException
 )
@@ -51,14 +65,91 @@ from gdalconst import GA_ReadOnly
 gdal.UseExceptions()
 gdal.PushErrorHandler('CPLQuietErrorHandler')
 
+from .mapcanvasfeature import MapCanvasFeature
+
+class StyleOutputFootPrint(QObject):
+    layerId = None
+    @staticmethod
+    def actions( nameAction, layer_id, feature_id):
+        def _getRasterLayer(feature):
+            pathfile = feature.attribute('pathfile')
+            sources = dict( [ ( layer.source(), layer ) for layer in project.mapLayers().values() ] )
+            if pathfile in sources.keys():
+                layer = sources[ pathfile ]
+                needAdd = False
+            else:
+                name = QFileInfo( pathfile ).baseName()
+                layer = QgsRasterLayer( pathfile, name )
+                needAdd = True
+            return { 'layer': layer, 'needAdd': needAdd }
+
+        # Actions functions
+        def highlight():
+            m = MapCanvasFeature()
+            m.highlight( layer, feature )
+
+        def zoom():
+            m = MapCanvasFeature()
+            m.zoom( layer, feature )
+
+        def show_hideImage():
+            r = _getRasterLayer( feature )
+            if r['needAdd']:
+                project.addMapLayer( r['layer'] )
+                ltl = project.layerTreeRoot().findLayer( r['layer'] )
+                ltl.setItemVisibilityChecked( True )
+            else:
+                ltl = project.layerTreeRoot().findLayer( r['layer'] )
+                ltl.setItemVisibilityChecked( not ltl.isVisible() )
+            
+        def setCurrent():
+            r = _getRasterLayer( feature )
+            if r['needAdd']:
+                project.addMapLayer( r['layer'] )
+            else:
+                QgsUtils.iface.setActiveLayer( r['layer'] )
+
+        actionsFunc = {
+            'highlight': highlight,
+            'zoom': zoom,
+            'show_hideImage': show_hideImage,
+            'setCurrent': setCurrent
+        }
+        if not nameAction in actionsFunc.keys():
+            return { 'isOk': False, 'message': "Missing action '{}'".format( nameAction ) }
+        project = QgsProject().instance()
+        layer = project.mapLayer( layer_id )
+        feature = layer.getFeature( feature_id )
+        pathfile = feature.attribute('pathfile')
+        info = QFileInfo( pathfile )
+        if not info.exists():
+            return { 'isOk': False, 'message': "Raster file '{}' not found".format( pathfile ) }
+        actionsFunc[ nameAction ]()
+        return { 'isOk': True }
+
+    def __init__(self):
+        super().__init__()
+        self.project = QgsProject().instance()
+        self.project.layerWasAdded.connect( self.layerWasAdded )
+        self.styleFile = 'footprint.qml'
+
+    def __del__(self):
+        self.project.layerWasAdded.disconnect( self.layerWasAdded )
+
+    @pyqtSlot('QgsMapLayer*')
+    def layerWasAdded(self, layer):
+        if layer.id() == self.layerId:
+            layer.loadNamedStyle( os.path.join( os.path.dirname( __file__ ), self.styleFile ) )
+
 
 class FootPrint():
     @staticmethod
     def getParamsFeatureSink():
         fields = QgsFields()
+        fields.append( QgsField( 'name', QVariant.String, len=100 ) )
         fields.append( QgsField( 'pathfile', QVariant.String, len=250 ) )
-        fields.append( QgsField( 'metadata', QVariant.String, len=500 ) )
-        fields.append( QgsField( 'metadata_html', QVariant.String,len=500 ) )
+        fields.append( QgsField( 'metadata', QVariant.String, len=800 ) )
+        fields.append( QgsField( 'metadata_html', QVariant.String,len=800 ) )
         fields.append( QgsField( 'metadata_size', QVariant.Int ) )
         return { 'fields': fields, 'wkbType': QgsWkbTypes.MultiPolygon }
 
@@ -80,10 +171,11 @@ class FootPrint():
 
         # InfoImage = {
         #  'area':  { 'auth', 'value' }
-        #  'bands'  { ''total', 'types' }
+        #  'bands'  { 'total', 'types' }
         #  'crs':   { 'auth', 'isProjected' }
         #  'drive'
         #  'sizes': { 'pixel': { 'resolutionX', 'resolutionY' }, 'raster': { 'pixelsX', 'pixelsY' } }
+        #  'metadata_file': { DEPEND of DRIVE} or None
         # }
         # Temporary keys: { 'pathfile', 'bbox_wkt', 'geom' }
 
@@ -129,13 +221,16 @@ class FootPrint():
             wkt = ds.GetProjectionRef()
             crs = self.getAuthority( wkt )
             sizes, bbox = getSizesBoundingBox( ds )
+            pathfile = ds.GetDescription()
+            name = QFileInfo( pathfile ).baseName()
             item = {
-                'pathfile': ds.GetDescription(),
+                'pathfile': pathfile,
+                'name': name,
                 'crs': crs,
                 'bands': getBands( ds ),
                 'sizes': sizes,
                 'bbox_wkt': bbox,
-                'drive': ds.GetDriver().GetDescription()
+                'drive': ds.GetDriver().GetDescription(),
             }
             ds = None #close
             self.infoImages.append( item )
@@ -217,7 +312,7 @@ class FootPrint():
             else:
                 info['geom'] = { 'value': r['geom'] }
 
-        def getHtmlTreeMetadata(value, html):
+        def getHtmlTreeMetadata(value, html=''):
             if isinstance( value, dict ):
                 html += "<ul>"
                 for key, val in sorted( value.items() ):
@@ -350,7 +445,9 @@ class FootPrint():
             del info['bbox_wkt']
             geom = QgsGeometry.fromWkt( geomOGR.ExportToWkt() )
             setInfoArea( info, geom )
-            geom_s = geom.simplify( paramsValidPixels['tolerance'] )
+            
+            tolerance_unit = paramsValidPixels['tolerance_pixels'] * info['sizes']['pixel']['resolutionX']
+            geom_s = geom.simplify( tolerance_unit )
             setInfoGeometry( info, geom_s )
 
         if len( crsArea.toWkt() ) == 0:
@@ -378,9 +475,11 @@ class FootPrint():
                 info['geom']['value'] = True
             else:
                 info['geom']['value'] = False
+            feat.setAttribute('name', info['name'] )
+            del info['name']
             feat.setAttribute('pathfile', info['pathfile'] )
             del info['pathfile']
-            metadata_html = getHtmlTreeMetadata( info, '' )
+            metadata_html = getHtmlTreeMetadata( info )
             metadata = json.dumps( info )
             feat.setAttribute('metadata', metadata )
             feat.setAttribute('metadata_html', metadata_html )
@@ -447,8 +546,7 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         return QCoreApplication.translate('Footprint', 'IBAMA,image,raster,catalog').split(',')
 
     def shortHelpString(self):
-        return QCoreApplication.translate('Footprint', """
-        Calculate the footprints of georeferenced images.
+        return QCoreApplication.translate('Footprint', """Calculate the footprints of georeferenced images.
 
         Usage:
         - Choice the directory of input images.
@@ -461,12 +559,12 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         - Select the CRS for the calculate of area.
           This CRS will be use if image not have the projected CRS.
         - Select the type of calculus of Footprint polygons:
-          . Bounding Box.
-          . Valid pixels: Calculates the image limit.
+          . Bounding Box: Area is calculate with this geometry.
+          . Valid pixels: Area is calculate with the image limit.
+                          After calculus of area, the geometry is simplified.
         - Value of NODATA: Use this value for the areas where not have value.
         - Select the CRS for the footprint layer.
-        - Select the source for the output of footprint layer.
-        """)
+        - Select the source for the output of footprint layer.""")
 
     def helpUrl(self):
         return 'https://github.com/lmotta/ibamaprocessing/wiki'
@@ -554,11 +652,9 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         typeCalculate = self.parameterAsEnum(parameters, self.INPUT_CALCULATE, context )
         nodata = self.parameterAsInt(parameters, self.INPUT_NODATA, context )
 
-
         p = FootPrint.getParamsFeatureSink()
         (sink, dest_id) = self.parameterAsSink( parameters, self.OUTPUT_LAYER, context,
                                                fields=p['fields'], geometryType=p['wkbType'], crs=crsLayer )
-
         footprint = FootPrint(sink, feedback )
 
         msg = QCoreApplication.translate('Footprint', '1/2 Searching images...')
@@ -576,9 +672,10 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         msg = QCoreApplication.translate('Footprint','2/2 Adding features({})...')
         msg = msg.format( len( footprint.infoImages ) )
         feedback.setProgressText( msg )
-        paramsValidPixels = { 'nodata': nodata, 'tolerance': 0.1 }  if typeCalculate == 1 else None
+        paramsValidPixels = { 'nodata': nodata, 'tolerance_pixels': 3 }  if typeCalculate == 1 else None
         footprint.setGeometryArea( crsLayer, crsArea, paramsValidPixels )
         if feedback.isCanceled():
             return { self.OUTPUT_LAYER: None }
 
+        StyleOutputFootPrint.layerId = dest_id
         return { self.OUTPUT_LAYER: dest_id }

@@ -12,6 +12,7 @@ cp ./i18n/*.qm "./$plugin_dir/i18n"
 mkdir "./$plugin_dir/algorithms"
 cp ./algorithms/*.py "./$plugin_dir/algorithms"
 cp ./algorithms/*.svg "./$plugin_dir/algorithms"
+cp ./algorithms/*.qml "./$plugin_dir/algorithms"
 zip -r $plugin_dir $plugin_dir
 rm -r $plugin_dir
 #
