@@ -53,7 +53,9 @@ from qgis.core import (
     QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsCoordinateTransformContext,
     QgsRectangle, QgsGeometry,
     QgsMapLayer, QgsRasterLayer,
-    QgsFeature, QgsField, QgsFields, QgsEditorWidgetSetup, QgsWkbTypes,
+    QgsRasterTransparency,
+    QgsFeature, QgsField, QgsFields,  
+    QgsEditorWidgetSetup, QgsWkbTypes,
     QgsCsException
 )
 
@@ -65,13 +67,19 @@ gdal.UseExceptions()
 gdal.PushErrorHandler('CPLQuietErrorHandler')
 
 from .mapcanvasfeature import MapCanvasFeature
+from .transparencylayer import RasterTransparency
 
 class StyleOutputFootPrint(QObject):
     layerId = None
+    root = QgsProject.instance().layerTreeRoot()
     @staticmethod
-    def actions( nameAction, layer_id, feature_id):
+    def actions( nameAction, params):
         def _getRasterLayer(feature):
             pathfile = feature.attribute('pathfile')
+            info = QFileInfo( pathfile )
+            if not info.exists():
+                return { 'isOk': False, 'message': "Raster file '{}' not found".format( pathfile ) }
+
             sources = dict( [ ( layer.source(), layer ) for layer in project.mapLayers().values() ] )
             if pathfile in sources.keys():
                 layer = sources[ pathfile ]
@@ -80,51 +88,77 @@ class StyleOutputFootPrint(QObject):
                 name = QFileInfo( pathfile ).baseName()
                 layer = QgsRasterLayer( pathfile, name )
                 needAdd = True
-            return { 'layer': layer, 'needAdd': needAdd }
+            return { 'isOk': True, 'layer': layer, 'needAdd': needAdd }
+
+        def _addRaster(layer):
+            project.addMapLayer( layer )
+            ltl = project.layerTreeRoot().findLayer( layer )
+            ltl.setItemVisibilityChecked( True )
+            ltl.setExpanded( False )
 
         # Actions functions
         def highlight():
             m = MapCanvasFeature()
             m.highlight( layer, feature )
+            return { 'isOk': True }
 
         def zoom():
             m = MapCanvasFeature()
             m.zoom( layer, feature )
+            return { 'isOk': True }
 
         def show_hideImage():
             r = _getRasterLayer( feature )
+            if not r['isOk']:
+                return r
             if r['needAdd']:
-                project.addMapLayer( r['layer'] )
-                ltl = project.layerTreeRoot().findLayer( r['layer'] )
-                ltl.setItemVisibilityChecked( True )
+                _addRaster( r['layer'] )
             else:
                 ltl = project.layerTreeRoot().findLayer( r['layer'] )
                 ltl.setItemVisibilityChecked( not ltl.isVisible() )
+            return { 'isOk': True }
             
         def setCurrent():
             r = _getRasterLayer( feature )
+            if not r['isOk']:
+                return r
             if r['needAdd']:
-                project.addMapLayer( r['layer'] )
+                _addRaster( r['layer'] )
             else:
                 QgsUtils.iface.setActiveLayer( r['layer'] )
+            return { 'isOk': True }
+
+        def setZeroTransparency():
+            def existsCatalog(raster):
+                vfilter = '"pathfile" = \'{}\''.format( raster.source() )
+                viter = layer.getFeatures( vfilter )
+                feat = QgsFeature()
+                vreturn = viter.nextFeature( feat )
+                del feat
+                return vreturn
+
+            maplayers = map( lambda ltl: ltl.layer(), StyleOutputFootPrint.root.findLayers() )
+            rasters = filter( lambda layer: layer.type() == QgsMapLayer.RasterLayer, maplayers )
+            for raster in rasters:
+                if existsCatalog( raster):
+                    RasterTransparency.setTransparency( raster )
+
+            return { 'isOk': True }
 
         actionsFunc = {
-            'highlight': highlight,
-            'zoom': zoom,
+            'highlight':      highlight,
+            'zoom':           zoom,
             'show_hideImage': show_hideImage,
-            'setCurrent': setCurrent
+            'setCurrent':     setCurrent,
+            'setZeroTransparency': setZeroTransparency
         }
         if not nameAction in actionsFunc.keys():
             return { 'isOk': False, 'message': "Missing action '{}'".format( nameAction ) }
         project = QgsProject().instance()
-        layer = project.mapLayer( layer_id )
-        feature = layer.getFeature( feature_id )
-        pathfile = feature.attribute('pathfile')
-        info = QFileInfo( pathfile )
-        if not info.exists():
-            return { 'isOk': False, 'message': "Raster file '{}' not found".format( pathfile ) }
-        actionsFunc[ nameAction ]()
-        return { 'isOk': True }
+        layer = project.mapLayer( params['layer_id'] )
+        if 'feature_id' in params:
+            feature = layer.getFeature( params['feature_id'] )
+        return actionsFunc[ nameAction ]()
 
     def __init__(self):
         super().__init__()

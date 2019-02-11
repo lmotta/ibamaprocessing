@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis simplifyDrawingTol="1" minScale="1e+8" hasScaleBasedVisibilityFlag="0" simplifyDrawingHints="1" version="3.4.4-Madeira" simplifyAlgorithm="0" maxScale="-4.65661e-10" styleCategories="AllStyleCategories" simplifyMaxScale="1" simplifyLocal="1" readOnly="0" labelsEnabled="0">
+<qgis maxScale="-4.65661e-10" version="3.4.4-Madeira" labelsEnabled="0" styleCategories="AllStyleCategories" minScale="1e+8" simplifyDrawingHints="1" simplifyMaxScale="1" readOnly="0" simplifyAlgorithm="0" simplifyLocal="1" hasScaleBasedVisibilityFlag="0" simplifyDrawingTol="1">
   <flags>
     <Identifiable>1</Identifiable>
     <Removable>1</Removable>
@@ -7,8 +7,8 @@
   </flags>
   <renderer-v2 forceraster="0" symbollevels="0" enableorderby="0" type="singleSymbol">
     <symbols>
-      <symbol clip_to_extent="1" alpha="0.419608" name="0" force_rhr="0" type="fill">
-        <layer pass="0" enabled="1" class="SimpleFill" locked="0">
+      <symbol name="0" alpha="0.419608" force_rhr="0" type="fill" clip_to_extent="1">
+        <layer enabled="1" class="SimpleFill" locked="0" pass="0">
           <prop k="border_width_map_unit_scale" v="3x:0,0,0,0,0,0"/>
           <prop k="color" v="147,219,255,255"/>
           <prop k="joinstyle" v="bevel"/>
@@ -22,9 +22,9 @@
           <prop k="style" v="solid"/>
           <data_defined_properties>
             <Option type="Map">
-              <Option value="" name="name" type="QString"/>
+              <Option name="name" value="" type="QString"/>
               <Option name="properties"/>
-              <Option value="collection" name="type" type="QString"/>
+              <Option name="type" value="collection" type="QString"/>
             </Option>
           </data_defined_properties>
         </layer>
@@ -37,7 +37,7 @@
     <property key="dualview/previewExpressions">
       <value>name</value>
     </property>
-    <property key="embeddedWidgets/count" value="0"/>
+    <property value="0" key="embeddedWidgets/count"/>
     <property key="variableNames"/>
     <property key="variableValues"/>
   </customproperties>
@@ -45,17 +45,17 @@
   <featureBlendMode>0</featureBlendMode>
   <layerOpacity>1</layerOpacity>
   <SingleCategoryDiagramRenderer diagramType="Histogram" attributeLegend="1">
-    <DiagramCategory minimumSize="0" maxScaleDenominator="1e+8" backgroundColor="#ffffff" penColor="#000000" lineSizeScale="3x:0,0,0,0,0,0" enabled="0" barWidth="5" scaleBasedVisibility="0" sizeScale="3x:0,0,0,0,0,0" rotationOffset="270" penAlpha="255" height="15" lineSizeType="MM" labelPlacementMethod="XHeight" minScaleDenominator="-4.65661e-10" sizeType="MM" penWidth="0" backgroundAlpha="255" diagramOrientation="Up" scaleDependency="Area" opacity="1" width="15">
-      <fontProperties style="Regular" description="Noto Sans,10,-1,0,50,0,0,0,0,0,Regular"/>
-      <attribute field="" label="" color="#000000"/>
+    <DiagramCategory opacity="1" labelPlacementMethod="XHeight" enabled="0" penColor="#000000" scaleDependency="Area" rotationOffset="270" scaleBasedVisibility="0" penAlpha="255" sizeType="MM" minScaleDenominator="-4.65661e-10" sizeScale="3x:0,0,0,0,0,0" penWidth="0" minimumSize="0" lineSizeScale="3x:0,0,0,0,0,0" height="15" maxScaleDenominator="1e+8" backgroundAlpha="255" lineSizeType="MM" diagramOrientation="Up" barWidth="5" width="15" backgroundColor="#ffffff">
+      <fontProperties description="Noto Sans,10,-1,0,50,0,0,0,0,0,Regular" style="Regular"/>
+      <attribute field="" color="#000000" label=""/>
     </DiagramCategory>
   </SingleCategoryDiagramRenderer>
-  <DiagramLayerSettings showAll="1" zIndex="0" placement="1" dist="0" linePlacementFlags="18" priority="0" obstacle="0">
+  <DiagramLayerSettings linePlacementFlags="18" placement="1" priority="0" obstacle="0" dist="0" zIndex="0" showAll="1">
     <properties>
       <Option type="Map">
-        <Option value="" name="name" type="QString"/>
+        <Option name="name" value="" type="QString"/>
         <Option name="properties"/>
-        <Option value="collection" name="type" type="QString"/>
+        <Option name="type" value="collection" type="QString"/>
       </Option>
     </properties>
   </DiagramLayerSettings>
@@ -89,8 +89,8 @@
       <editWidget type="TextEdit">
         <config>
           <Option type="Map">
-            <Option value="true" name="IsMultiline" type="bool"/>
-            <Option value="true" name="UseHtml" type="bool"/>
+            <Option name="IsMultiline" value="true" type="bool"/>
+            <Option name="UseHtml" value="true" type="bool"/>
           </Option>
         </config>
       </editWidget>
@@ -104,11 +104,11 @@
     </field>
   </fieldConfiguration>
   <aliases>
-    <alias field="name" index="0" name=""/>
-    <alias field="pathfile" index="1" name=""/>
-    <alias field="metadata" index="2" name=""/>
-    <alias field="metadata_html" index="3" name=""/>
-    <alias field="metadata_size" index="4" name=""/>
+    <alias field="name" name="" index="0"/>
+    <alias field="pathfile" name="" index="1"/>
+    <alias field="metadata" name="" index="2"/>
+    <alias field="metadata_html" name="" index="3"/>
+    <alias field="metadata_size" name="" index="4"/>
   </aliases>
   <excludeAttributesWMS/>
   <excludeAttributesWFS/>
@@ -120,11 +120,11 @@
     <default field="metadata_size" expression="" applyOnUpdate="0"/>
   </defaults>
   <constraints>
-    <constraint field="name" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
-    <constraint field="pathfile" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
-    <constraint field="metadata" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
-    <constraint field="metadata_html" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
-    <constraint field="metadata_size" unique_strength="0" notnull_strength="0" exp_strength="0" constraints="0"/>
+    <constraint field="name" constraints="0" notnull_strength="0" unique_strength="0" exp_strength="0"/>
+    <constraint field="pathfile" constraints="0" notnull_strength="0" unique_strength="0" exp_strength="0"/>
+    <constraint field="metadata" constraints="0" notnull_strength="0" unique_strength="0" exp_strength="0"/>
+    <constraint field="metadata_html" constraints="0" notnull_strength="0" unique_strength="0" exp_strength="0"/>
+    <constraint field="metadata_size" constraints="0" notnull_strength="0" unique_strength="0" exp_strength="0"/>
   </constraints>
   <constraintExpressions>
     <constraint field="name" exp="" desc=""/>
@@ -135,28 +135,31 @@
   </constraintExpressions>
   <expressionfields/>
   <attributeactions>
-    <defaultAction key="Canvas" value="{00000000-0000-0000-0000-000000000000}"/>
-    <actionsetting shortTitle="" notificationMessage="" action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'zoom'&#xa;r = StyleOutputFootPrint.actions( nameAction, '[% @layer_id %]', [% $id %] )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" icon="" isEnabledOnlyWhenEditable="0" capture="0" id="{8bb219ee-293d-4aa5-a639-d77f625c1d0e}" name="Zoom Image" type="1">
+    <defaultAction value="{00000000-0000-0000-0000-000000000000}" key="Canvas"/>
+    <actionsetting action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'zoom'&#xa;params = {&#xa;    'layer_id': '[% @layer_id %]',&#xa;    'feature_id':[% $id %], &#xa;}&#xa;r = StyleOutputFootPrint.actions( nameAction, params )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" name="Zoom Image" capture="0" icon="" shortTitle="Zoom Image" notificationMessage="" id="{e747cde0-5d2c-40fd-b7a4-2254d5b1589e}" isEnabledOnlyWhenEditable="0" type="1">
       <actionScope id="Feature"/>
     </actionsetting>
-    <actionsetting shortTitle="" notificationMessage="" action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'highlight'&#xa;r = StyleOutputFootPrint.actions( nameAction, '[% @layer_id %]', [% $id %] )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" icon="" isEnabledOnlyWhenEditable="0" capture="0" id="{0240de0f-1cac-43f4-a713-ba0810aa83a5}" name="Highlight Image" type="1">
+    <actionsetting action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'highlight'&#xa;params = {&#xa;    'layer_id': '[% @layer_id %]',&#xa;    'feature_id':[% $id %], &#xa;}&#xa;r = StyleOutputFootPrint.actions( nameAction, params )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" name="Highlight Image" capture="0" icon="" shortTitle="Highlight Image" notificationMessage="" id="{cf6f729d-976d-4988-8f05-9c186a84bb22}" isEnabledOnlyWhenEditable="0" type="1">
       <actionScope id="Feature"/>
     </actionsetting>
-    <actionsetting shortTitle="" notificationMessage="" action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'show_hideImage'&#xa;r = StyleOutputFootPrint.actions( nameAction, '[% @layer_id %]', [% $id %] )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" icon="" isEnabledOnlyWhenEditable="0" capture="0" id="{8134e5f5-bbed-4242-986c-434b55313d89}" name="Show/Hide Image" type="1">
+    <actionsetting action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'show_hideImage'&#xa;params = {&#xa;    'layer_id': '[% @layer_id %]',&#xa;    'feature_id':[% $id %], &#xa;}&#xa;r = StyleOutputFootPrint.actions( nameAction, params )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" name="Show/Hide Image" capture="0" icon="" shortTitle="Show/Hide Image" notificationMessage="" id="{b3030c13-5dd0-4618-82d0-e7b49364c361}" isEnabledOnlyWhenEditable="0" type="1">
       <actionScope id="Feature"/>
     </actionsetting>
-    <actionsetting shortTitle="" notificationMessage="" action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'setCurrent'&#xa;r = StyleOutputFootPrint.actions( nameAction, '[% @layer_id %]', [% $id %] )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" icon="" isEnabledOnlyWhenEditable="0" capture="0" id="{00c89fc6-2945-4238-92ba-300406a9b413}" name="Set Current Image" type="1">
+    <actionsetting action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'setCurrent'&#xa;params = {&#xa;    'layer_id': '[% @layer_id %]',&#xa;    'feature_id':[% $id %], &#xa;}&#xa;r = StyleOutputFootPrint.actions( nameAction, params )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" name="Current Image" capture="0" icon="" shortTitle="Current Image" notificationMessage="" id="{82d374f6-bef7-413b-af26-1f2bfa16864d}" isEnabledOnlyWhenEditable="0" type="1">
       <actionScope id="Feature"/>
+    </actionsetting>
+    <actionsetting action="from qgis import utils as QgsUtils&#xa;from ibamaprocessing.algorithms.footprint_algorithm import StyleOutputFootPrint&#xa;&#xa;nameAction = 'setZeroTransparency'&#xa;params = {&#xa;    'layer_id': '[% @layer_id %]'&#xa;}&#xa;r = StyleOutputFootPrint.actions( nameAction, params )&#xa;if not r['isOk']:&#xa;  msgBar =  QgsUtils.iface.messageBar()&#xa;  title = &quot;Action {}&quot;.format( nameAction )&#xa;  msgBar.pushCritical( title,  r['message'] )&#xa;" name="Zero Transparency" capture="0" icon="" shortTitle="Zero Transparency" notificationMessage="" id="{4fe2d548-d6e2-4f02-a0d1-c47caa05095e}" isEnabledOnlyWhenEditable="0" type="1">
+      <actionScope id="Layer"/>
     </actionsetting>
   </attributeactions>
-  <attributetableconfig actionWidgetStyle="dropDown" sortOrder="0" sortExpression="">
+  <attributetableconfig sortOrder="0" actionWidgetStyle="dropDown" sortExpression="">
     <columns>
-      <column hidden="0" width="-1" name="name" type="field"/>
-      <column hidden="1" width="-1" type="actions"/>
-      <column hidden="0" width="-1" name="pathfile" type="field"/>
-      <column hidden="0" width="-1" name="metadata" type="field"/>
-      <column hidden="0" width="-1" name="metadata_html" type="field"/>
-      <column hidden="0" width="-1" name="metadata_size" type="field"/>
+      <column name="name" hidden="0" type="field" width="-1"/>
+      <column hidden="1" type="actions" width="-1"/>
+      <column name="pathfile" hidden="0" type="field" width="-1"/>
+      <column name="metadata" hidden="0" type="field" width="-1"/>
+      <column name="metadata_html" hidden="0" type="field" width="-1"/>
+      <column name="metadata_size" hidden="0" type="field" width="-1"/>
     </columns>
   </attributetableconfig>
   <conditionalstyles>
@@ -190,26 +193,26 @@ def my_form_open(diálogo, camada, feição):
   <featformsuppress>0</featformsuppress>
   <editorlayout>generatedlayout</editorlayout>
   <editable>
-    <field editable="1" name="filename"/>
-    <field editable="1" name="meta_html"/>
-    <field editable="1" name="meta_jsize"/>
-    <field editable="1" name="meta_json"/>
-    <field editable="0" name="metadata"/>
-    <field editable="0" name="metadata_html"/>
-    <field editable="0" name="metadata_size"/>
-    <field editable="1" name="name"/>
-    <field editable="1" name="pathfile"/>
+    <field name="filename" editable="1"/>
+    <field name="meta_html" editable="1"/>
+    <field name="meta_jsize" editable="1"/>
+    <field name="meta_json" editable="1"/>
+    <field name="metadata" editable="0"/>
+    <field name="metadata_html" editable="0"/>
+    <field name="metadata_size" editable="0"/>
+    <field name="name" editable="1"/>
+    <field name="pathfile" editable="1"/>
   </editable>
   <labelOnTop>
-    <field labelOnTop="0" name="filename"/>
-    <field labelOnTop="0" name="meta_html"/>
-    <field labelOnTop="0" name="meta_jsize"/>
-    <field labelOnTop="0" name="meta_json"/>
-    <field labelOnTop="0" name="metadata"/>
-    <field labelOnTop="1" name="metadata_html"/>
-    <field labelOnTop="0" name="metadata_size"/>
-    <field labelOnTop="0" name="name"/>
-    <field labelOnTop="0" name="pathfile"/>
+    <field name="filename" labelOnTop="0"/>
+    <field name="meta_html" labelOnTop="0"/>
+    <field name="meta_jsize" labelOnTop="0"/>
+    <field name="meta_json" labelOnTop="0"/>
+    <field name="metadata" labelOnTop="0"/>
+    <field name="metadata_html" labelOnTop="1"/>
+    <field name="metadata_size" labelOnTop="0"/>
+    <field name="name" labelOnTop="0"/>
+    <field name="pathfile" labelOnTop="0"/>
   </labelOnTop>
   <widgets/>
   <previewExpression>name</previewExpression>
