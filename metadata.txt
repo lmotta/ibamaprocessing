@@ -1,9 +1,9 @@
 [general]
 name:IBAMA processing
 description:Algorithms for processing framework
-about:Algorithms for processing framework
-- Footprint: Create a catalog layer from directories of images.
-* Icon made by Freepik (http://www.freepik.com) from www.flaticon.com is licensed by Creative Commons BY 3.0
+about:Algorithms:
+  - Footprint: Create a catalog layer from directories of images.
+  * Icon made by Freepik (http://www.freepik.com) from www.flaticon.com is licensed by Creative Commons BY 3.0
 
   This tools are developed on the demand of IBAMA(Brazilian Institute of Environment and Renewable Natural Resources)
   http://www.ibama.gov.br
