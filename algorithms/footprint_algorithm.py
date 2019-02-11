@@ -61,7 +61,6 @@ import numpy as np
 import os, json
 
 from osgeo import gdal, ogr, osr
-from gdalconst import GA_ReadOnly
 gdal.UseExceptions()
 gdal.PushErrorHandler('CPLQuietErrorHandler')
 
@@ -182,7 +181,7 @@ class FootPrint():
     def setInfoImages(self, pathRoot, hasSubdirectories, filterNames=None, reverse=False):
         def getGeorefenceDataSet(pathfile):
             try:
-                ds = gdal.Open( pathfile, GA_ReadOnly )
+                ds = gdal.Open( pathfile, gdal.GA_ReadOnly )
             except RuntimeError:
                 return None
             wkt = ds.GetProjectionRef()
@@ -234,7 +233,6 @@ class FootPrint():
             }
             ds = None #close
             self.infoImages.append( item )
-            return { 'isOk': True }
 
         del self.infoImages[:]
         filters = QDir.Files
@@ -250,10 +248,7 @@ class FootPrint():
                 ds = getGeorefenceDataSet( pathfile )
                 if ds is None:
                     continue
-                r = addImage( ds )
-                if not r['isOk']:
-                    msg = "{}. '{}'".format( r['message'], pathfile )
-                    self.feedback.reportError( msg )
+                addImage( ds )
                 if self.feedback.isCanceled():
                     break
 
@@ -266,10 +261,7 @@ class FootPrint():
                 ds = getGeorefenceDataSet( pathfile )
                 if ds is None:
                     continue
-                r = addImage( ds )
-                if not r['isOk']:
-                    msg ="{}. '{}'".format( r['message'], pathfile )
-                    self.feedback.reportError( msg )
+                addImage( ds )
                 if self.feedback.isCanceled():
                     break
 
@@ -380,7 +372,7 @@ class FootPrint():
                 return { 'isOk': True, 'ds': ds, 'layer': layer }
 
             try:
-                ds = gdal.Open( info['pathfile'], GA_ReadOnly )
+                ds = gdal.Open( info['pathfile'], gdal.GA_ReadOnly )
             except RuntimeError as error:
                 setError( str( error ) )
                 return
