@@ -1,12 +1,14 @@
 [general]
 name:IBAMA processing
-description:Tools for processing framework
-about:Tools for processing framework
+description:Algorithms for processing framework
+about:Algorithms for processing framework
+- Footprint: Create a catalog layer from directories of images.
+* Icon made by Freepik (http://www.freepik.com) from www.flaticon.com is licensed by Creative Commons BY 3.0
+
   This tools are developed on the demand of IBAMA(Brazilian Institute of Environment and Renewable Natural Resources)
   http://www.ibama.gov.br
-  * Footprint Icon made by Freepik (http://www.freepik.com) from www.flaticon.com is licensed by Creative Commons BY 3.0
 
-version:1.1
+version:1.2
 qgisMinimumVersion:3.2
 
 author:Luiz Motta
@@ -25,7 +27,9 @@ icon:ibama.svg
 experimental:True
 deprecated:False
 
-changelog:1.1(2019-02-01)
+changelog:1.2(2019-02-11)
+  Add transparecy for raster(Single or RGB bands)
+  - 1.1(2019-02-01)
   Added full style in Footprint layer
   - 1.0(2019-01-29)
   Start of plugin

@@ -12,6 +12,8 @@ Tools for processing framework
 Luiz Motta
 
 ## Changelog
+- 2019-02-11
+Add transparecy for raster(Single or RGB bands)
 - 2019-02-01
 Added full style in Footprint layer
 - 2019-01-29
