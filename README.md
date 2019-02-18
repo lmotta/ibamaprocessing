@@ -12,6 +12,8 @@ Tools for processing framework
 Luiz Motta
 
 ## Changelog
+- 2019-02-18
+Use QFileInfo.completeBaseName for name of layer and fixed bug when change locale
 - 2019-02-11
 Add transparecy for raster(Single or RGB bands)
 - 2019-02-01
