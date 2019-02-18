@@ -54,17 +54,17 @@ class IbamaProvider(QgsProcessingProvider):
     def __init__(self):
         QgsProcessingProvider.__init__(self)
         self.styleOutputFootPrint = StyleOutputFootPrint()
-        self.alglist = [ FootprintAlgorithm() ]
-        
+
     def unload(self):
-        self.styleOutputFootPrint
+        del self.styleOutputFootPrint
 
     def loadAlgorithms(self):
         """
         Loads all algorithms belonging to this provider.
         """
-        for alg in self.alglist:
-            self.addAlgorithm( alg )
+        alglist = [ FootprintAlgorithm ]
+        for alg in alglist:
+            self.addAlgorithm( alg() )
 
     def id(self):
         """

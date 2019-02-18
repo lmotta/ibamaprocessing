@@ -85,7 +85,7 @@ class StyleOutputFootPrint(QObject):
                 layer = sources[ pathfile ]
                 needAdd = False
             else:
-                name = QFileInfo( pathfile ).baseName()
+                name = QFileInfo( pathfile ).completeBaseName()
                 layer = QgsRasterLayer( pathfile, name )
                 needAdd = True
             return { 'isOk': True, 'layer': layer, 'needAdd': needAdd }
@@ -255,7 +255,7 @@ class FootPrint():
             crs = self.getAuthority( wkt )
             sizes, bbox = getSizesBoundingBox( ds )
             pathfile = ds.GetDescription()
-            name = QFileInfo( pathfile ).baseName()
+            name = QFileInfo( pathfile ).completeBaseName()
             item = {
                 'pathfile': pathfile,
                 'name': name,
