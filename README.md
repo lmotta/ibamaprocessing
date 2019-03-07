@@ -4,9 +4,9 @@
 ![][ibama_logo]  
 [Brazilian Institute of Environment and Renewable Natural Resources](http://www.ibama.gov.br)
 
-# IBAMA tools
+# IBAMA Processing
 
-Tools for processing framework
+Algorithms for Processing toolbox
 
 ## Author
 Luiz Motta
