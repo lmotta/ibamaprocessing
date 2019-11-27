@@ -12,6 +12,8 @@ Algorithms for Processing toolbox
 Luiz Motta
 
 ## Changelog
+- 2019-11-27
+Added Flash
 - 2019-02-18
 Use QFileInfo.completeBaseName for name of layer and fixed bug when change locale
 - 2019-02-11

@@ -24,38 +24,16 @@ __date__ = '2019-01-31'
 __copyright__ = '(C) 2019, Luiz Motta'
 __revision__ = '$Format:%H$'
 
-from qgis.PyQt.QtCore import QTimer
-from qgis.PyQt.QtGui import QColor
-
 from qgis import utils as QgsUtils
-from qgis.core import QgsProject, QgsCoordinateTransform, QgsFeature
-from qgis.gui import QgsHighlight
+from qgis.core import QgsProject, QgsCoordinateTransform
 
 class  MapCanvasFeature():
     def __init__(self):
         self.project = QgsProject().instance()
         self.canvas = QgsUtils.iface.mapCanvas()
-        self.timer = QTimer( self.canvas )
-        self.flash = None
         
-    def highlight(self, layer, feature):
-        def getFlash():
-            h = QgsHighlight( self.canvas, feature.geometry(), layer )
-            h.setColor(     QColor( 255, 0, 0, 255 ) )
-            h.setFillColor( QColor( 255, 0, 0, 100 ) )
-            h.setWidth( 2 )
-            return h
-
-        def finished():
-            self.timer.stop()
-            self.timer.timeout.disconnect( finished )
-            del self.flash
-
-        if not feature.hasGeometry():
-            return
-        self.flash = getFlash()
-        self.timer.timeout.connect( finished )
-        self.timer.start( 500 ) # Milliseconds before finishing the flash
+    def flash(self, layer, feature):
+        self.canvas.flashGeometries( [ feature.geometry() ], layer.crs() )
 
     def zoom(self, layer, feature):
         def getBoudingBoxGeomCanvas():
@@ -74,4 +52,4 @@ class  MapCanvasFeature():
         self.canvas.setExtent( getBoudingBoxGeomCanvas() )
         self.canvas.zoomByFactor( 1.05 )
         self.canvas.refresh()
-        self.highlight( layer, feature )
+        self.flash( layer, feature )

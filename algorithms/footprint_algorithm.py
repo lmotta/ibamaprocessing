@@ -97,9 +97,9 @@ class StyleOutputFootPrint(QObject):
             ltl.setExpanded( False )
 
         # Actions functions
-        def highlight():
+        def flash():
             m = MapCanvasFeature()
-            m.highlight( layer, feature )
+            m.flash( layer, feature )
             return { 'isOk': True }
 
         def zoom():
@@ -146,7 +146,7 @@ class StyleOutputFootPrint(QObject):
             return { 'isOk': True }
 
         actionsFunc = {
-            'highlight':      highlight,
+            'flash':          flash,
             'zoom':           zoom,
             'show_hideImage': show_hideImage,
             'setCurrent':     setCurrent,
