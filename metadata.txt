@@ -9,7 +9,7 @@ about:Algorithms:
   http://www.ibama.gov.br
 
 version:1.4
-qgisMinimumVersion:3.2
+qgisMinimumVersion:3.4
 
 author:Luiz Motta
 email:motta.luiz@gmail.com
