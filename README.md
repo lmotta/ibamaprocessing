@@ -12,6 +12,8 @@ Algorithms for Processing toolbox
 Luiz Motta
 
 ## Changelog
+- 2020-02-17
+Changed for experimental:False
 - 2019-11-27
 Added Flash
 - 2019-02-18
