@@ -645,7 +645,7 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
                 'description': QCoreApplication.translate('Footprint', "Value of NODATA(if image doesn't have). For Valid pixels option"),
                 'classParameter': QgsProcessingParameterNumber,
                 'type': QgsProcessingParameterNumber.Double,
-                'defaultValue': 0,
+                'defaultValue': 0
             },
             {
                 'name': self.INPUT_CRS_LAYER,
@@ -663,7 +663,8 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         for args in parameters:
             classParameter = args['classParameter']
             del args['classParameter']
-            self.addParameter( classParameter( **args ) )
+            parameter = classParameter( **args )
+            self.addParameter( parameter )
 
     def processAlgorithm(self, parameters, context, feedback):
         directoryImages = self.parameterAsFile(parameters, self.INPUT_DIRECTORY_IMAGES, context )
@@ -673,7 +674,7 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         crsLayer = self.parameterAsCrs(parameters, self.INPUT_CRS_LAYER, context )
         crsArea = self.parameterAsCrs(parameters, self.INPUT_CRS_AREA, context )
         typeCalculate = self.parameterAsEnum(parameters, self.INPUT_CALCULATE, context )
-        nodata = self.parameterAsInt(parameters, self.INPUT_NODATA, context )
+        nodata = self.parameterAsDouble(parameters, self.INPUT_NODATA, context )
 
         p = FootPrint.getParamsFeatureSink()
         (sink, dest_id) = self.parameterAsSink( parameters, self.OUTPUT_LAYER, context,
