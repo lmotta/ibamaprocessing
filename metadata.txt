@@ -8,7 +8,7 @@ about:Algorithms:
   This tools are developed on the demand of IBAMA(Brazilian Institute of Environment and Renewable Natural Resources)
   http://www.ibama.gov.br
 
-version:1.5
+version:1.6
 qgisMinimumVersion:3.4
 
 author:Luiz Motta
@@ -27,7 +27,9 @@ icon:ibama.svg
 experimental:False
 deprecated:False
 
-changelog:1.5(2020-02-17)
+changelog:1.6(2020-08-14)
+  Uses the null data value in the image, if exists. Thanks Trent Hare
+  - 1.5(2020-02-17)
   Changed for experimental:False
   - 1.4(2019-11-27)
   Added Flash

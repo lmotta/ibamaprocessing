@@ -12,6 +12,8 @@ Algorithms for Processing toolbox
 Luiz Motta
 
 ## Changelog
+2020-08-14
+Uses the null data value in the image, if exists. Thanks Trent Hare
 - 2020-02-17
 Changed for experimental:False
 - 2019-11-27
