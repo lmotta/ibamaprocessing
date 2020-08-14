@@ -210,30 +210,9 @@ class FootPrint():
         #  'sizes': { 'pixel': { 'resolutionX', 'resolutionY' }, 'raster': { 'pixelsX', 'pixelsY' } }
         #  'metadata_file': { DEPEND of DRIVE} or None
         # }
-        # Temporary keys: { 'pathfile', 'bbox_wkt', 'geom' }
 
     def setInfoImages(self, pathRoot, hasSubdirectories, filterNames=None, reverse=False):
-        def getGeorefenceDataSet(pathfile):
-            try:
-                ds = gdal.Open( pathfile, gdal.GA_ReadOnly )
-            except RuntimeError:
-                return None
-            wkt = ds.GetProjectionRef()
-            if len( wkt ) == 0:
-                ds = None
-                return None
-            return ds
-
-        def addImage(ds):
-            def getBands(ds):
-                total = ds.RasterCount
-                bands = []
-                for idx in range( ds.RasterCount ):
-                    band = ds.GetRasterBand( idx+1 )
-                    info = "B{}({})".format( idx+1, gdal.GetDataTypeName( band.DataType ) )
-                    bands.append( info )
-                return { 'total': total, 'types': ",".join( bands ) }
-
+        def addValidImage(pathfile):
             def getSizesBoundingBox(ds):
                 def getBBox(sizePixel, sizeRaster, rotation ):
                     xMin, yMax = coefs[0], coefs[3]
@@ -251,22 +230,38 @@ class FootPrint():
                 bbox = getBBox( sizes['pixel'], sizes['raster'], rotation )
                 return sizes, bbox
 
+            def getBands(ds):
+                total = ds.RasterCount
+                bands = []
+                for idx in range( ds.RasterCount ):
+                    band = ds.GetRasterBand( idx+1 )
+                    info = "B{}({})".format( idx+1, gdal.GetDataTypeName( band.DataType ) )
+                    bands.append( info )
+                return { 'total': total, 'types': ",".join( bands ) }
+
+            # File is image
+            try:
+                ds = gdal.Open( pathfile, gdal.GA_ReadOnly )
+            except RuntimeError:
+                return
+            # Has Projection and Bands
             wkt = ds.GetProjectionRef()
-            crs = self.getAuthority( wkt )
+            if len( wkt ) == 0 or ds.RasterCount == 0:
+                return
+            # Add image
             sizes, bbox = getSizesBoundingBox( ds )
-            pathfile = ds.GetDescription()
-            name = QFileInfo( pathfile ).completeBaseName()
             item = {
                 'pathfile': pathfile,
-                'name': name,
-                'crs': crs,
+                'name': QFileInfo( pathfile ).completeBaseName(),
+                'crs': self.getAuthority( wkt ),
                 'bands': getBands( ds ),
                 'sizes': sizes,
                 'bbox_wkt': bbox,
                 'drive': ds.GetDriver().GetDescription(),
+                'nodata': ds.GetRasterBand(1).GetNoDataValue()
             }
-            ds = None #close
             self.infoImages.append( item )
+            ds = None #close
 
         del self.infoImages[:]
         filters = QDir.Files
@@ -279,23 +274,16 @@ class FootPrint():
                 pathfileUpper = QFileInfo( pathfile ).fileName().upper()
                 if any ( name.upper() in pathfileUpper for name in filterNames ):
                     continue
-                ds = getGeorefenceDataSet( pathfile )
-                if ds is None:
-                    continue
-                addImage( ds )
+                addValidImage( pathfile )
                 if self.feedback.isCanceled():
                     break
-
         else:
             if not filterNames is None:
                 fn = [ "*{}*".format( n ) for n in filterNames ]
                 iter = QDirIterator(  pathRoot, fn, filters, flags )
             while iter.hasNext():
                 pathfile = iter.next()
-                ds = getGeorefenceDataSet( pathfile )
-                if ds is None:
-                    continue
-                addImage( ds )
+                addValidImage( pathfile )
                 if self.feedback.isCanceled():
                     break
 
@@ -377,12 +365,13 @@ class FootPrint():
             
             def getDataSetBandMaskMemory(dsIn):
                 def writeValidPixels(band):
+                    nodata = info['nodata'] if not info['nodata'] is None else paramsValidPixels['nodata']
                     arryBand = np.array( dsIn.GetRasterBand(1).ReadAsArray() )
-                    arryValid = arryBand != paramsValidPixels['nodata']
+                    arryValid = arryBand != nodata
                     del arryBand
                     band.WriteArray( arryValid )
                     del arryValid
-                    band.SetNoDataValue( paramsValidPixels['nodata'] )
+                    band.SetNoDataValue( 0 )
 
                 r = getDataSetRasterMemory( dsIn )
                 if not r['isOk']:
@@ -462,10 +451,10 @@ class FootPrint():
             geomUnion = ogr.Geometry( ogr.wkbMultiPolygon )
             for idx in range( len( geomsOGR ) ):
                 geomUnion.AddGeometry( geomsOGR[ idx ] )
-                geomsOGR[ idx ].Destroy()
+                del geomsOGR[ idx ]
             del geomsOGR[:]
             geomOGR = geomUnion.UnionCascaded()
-            geomUnion.Destroy()
+            del geomUnion
 
             # set Info
             del info['bbox_wkt']
@@ -613,60 +602,68 @@ class FootprintAlgorithm(QgsProcessingAlgorithm):
         return ( True, None)
         
     def initAlgorithm(self, config=None):
-        self.addParameter(
-            QgsProcessingParameterFile(
-                self.INPUT_DIRECTORY_IMAGES, QCoreApplication.translate('Footprint', 'Directory of input images'),
-                QgsProcessingParameterFile.Folder
-            )
+        parameters = (
+            {
+                'name': self.INPUT_DIRECTORY_IMAGES,
+                'description': QCoreApplication.translate('Footprint', 'Directory of input images'),
+                'classParameter': QgsProcessingParameterFile,
+                'behavior': QgsProcessingParameterFile.Folder
+            },
+            {
+                'name': self.INPUT_SUBDIRECTORIES,
+                'description': QCoreApplication.translate('Footprint', 'Search in subdirectories'),
+                'classParameter': QgsProcessingParameterBoolean,
+                'defaultValue': False
+            },
+            {
+                'name': self.INPUT_FILTER_NAMES,
+                'description': QCoreApplication.translate('Footprint', "Filters for search(separate by ';')"),
+                'classParameter': QgsProcessingParameterString,
+                'optional': True
+            },
+            {
+                'name': self.INPUT_REVERSE,
+                'description': QCoreApplication.translate('Footprint', 'Reverse of filters'),
+                'classParameter': QgsProcessingParameterBoolean,
+                'defaultValue': False
+            },
+            {
+                'name': self.INPUT_CRS_AREA,
+                'description': QCoreApplication.translate('Footprint', 'CRS for calculate area(if image is not projected)'),
+                'classParameter': QgsProcessingParameterCrs,
+                'optional': True
+            },
+            {
+                'name': self.INPUT_CALCULATE,
+                'description': QCoreApplication.translate('Footprint', 'Type of calculus of Footprint polygons'),
+                'classParameter': QgsProcessingParameterEnum,
+                'options': [ self.typesCalculate[0], self.typesCalculate[1] ],
+                'defaultValue': 0
+            },
+            {
+                'name': self.INPUT_NODATA,
+                'description': QCoreApplication.translate('Footprint', "Value of NODATA(if image doesn't have). For Valid pixels option"),
+                'classParameter': QgsProcessingParameterNumber,
+                'type': QgsProcessingParameterNumber.Double,
+                'defaultValue': 0,
+            },
+            {
+                'name': self.INPUT_CRS_LAYER,
+                'description': QCoreApplication.translate('Footprint', 'CRS of Footprint layer'),
+                'classParameter': QgsProcessingParameterCrs,
+                'defaultValue': 'EPSG:4326',
+            },
+            {
+                'name': self.OUTPUT_LAYER,
+                'description': QCoreApplication.translate('Footprint', 'Footprint layer'),
+                'classParameter': QgsProcessingParameterFeatureSink,
+                'type': QgsProcessing.TypeVectorPolygon
+            },
         )
-        self.addParameter(
-            QgsProcessingParameterBoolean(
-                self.INPUT_SUBDIRECTORIES,QCoreApplication.translate('Footprint', 'Search in subdirectories'),
-                defaultValue=False
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterString(
-                self.INPUT_FILTER_NAMES, QCoreApplication.translate('Footprint', "Filters for search(separate by ';')"),
-                optional=True
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterBoolean(
-                self.INPUT_REVERSE, QCoreApplication.translate('Footprint', 'Reverse of filters'),
-                defaultValue=False
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterCrs(
-                self.INPUT_CRS_AREA, QCoreApplication.translate('Footprint', 'CRS for calculate area(if CRS of image is not projected)'),
-                optional=True
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterEnum(
-                self.INPUT_CALCULATE, QCoreApplication.translate('Footprint', 'Type of calculus of Footprint polygons'),
-                [ self.typesCalculate[0], self.typesCalculate[1] ], defaultValue=0
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterNumber(
-                self.INPUT_NODATA, QCoreApplication.translate('Footprint', 'Value of NODATA(use by Valid pixels)'),
-                QgsProcessingParameterNumber.Integer, 0
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterCrs(
-                self.INPUT_CRS_LAYER, QCoreApplication.translate('Footprint', 'CRS of Footprint layer'),
-                defaultValue='EPSG:4326'
-            )
-        )
-        self.addParameter(
-            QgsProcessingParameterFeatureSink(
-                self.OUTPUT_LAYER, QCoreApplication.translate('Footprint', 'Footprint layer'),
-                QgsProcessing.TypeVectorPolygon
-            )
-        )
+        for args in parameters:
+            classParameter = args['classParameter']
+            del args['classParameter']
+            self.addParameter( classParameter( **args ) )
 
     def processAlgorithm(self, parameters, context, feedback):
         directoryImages = self.parameterAsFile(parameters, self.INPUT_DIRECTORY_IMAGES, context )
